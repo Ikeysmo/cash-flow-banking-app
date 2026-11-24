@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14532d">
+  <title>Cashflow Banker</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Join -->
+  <main id="join-view" class="view" hidden>
+    <div class="join-card">
+      <div class="logo">💰</div>
+      <h1>Cashflow Banker</h1>
+      <p class="muted" id="join-count"></p>
+      <form id="join-form" autocomplete="off">
+        <label for="join-name">Your name</label>
+        <input id="join-name" maxlength="20" placeholder="e.g. Alex" required>
+        <label>Token colour</label>
+        <div id="color-picker" class="color-picker"></div>
+        <button type="submit" class="btn primary big" id="join-btn">Join game</button>
+        <p class="error" id="join-error" role="alert"></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Profession setup / edit -->
+  <main id="setup-view" class="view" hidden>
+    <div class="card">
+      <h1 id="setup-title">Your profession</h1>
+      <p class="muted" id="setup-help">Copy the numbers from the profession card you drew. Leave a line at 0 if your card doesn't have it.</p>
+      <form id="setup-form" autocomplete="off">
+        <div class="picker-label"><span>Pick your card</span><span class="muted small picker-hint">swipe for more →</span></div>
+        <div id="profession-picker" class="profession-picker" role="listbox" aria-label="Professions"></div>
+        <div id="setup-fields"></div>
+        <div id="setup-preview" class="preview"></div>
+        <p class="error" id="setup-error" role="alert"></p>
+        <div class="sheet-buttons">
+          <button type="button" class="btn" id="setup-cancel">Cancel</button>
+          <button type="submit" class="btn primary" id="setup-submit">Start playing</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Main -->
+  <main id="main-view" class="view" hidden>
+    <div id="win-banner"></div>
+
+    <header class="hero" id="hero"></header>
+
+    <nav class="pager-nav" aria-label="Pages">
+      <button class="selected" data-page="0">🎲 Play</button>
+      <button data-page="1">📊 Statement</button>
+    </nav>
+
+    <div class="pager" id="pager">
+      <div class="page" id="page-play">
+        <div id="escape-banner"></div>
+        <div id="reminders"></div>
+
+        <section class="actions" id="actions"></section>
+
+        <section id="requests"></section>
+
+        <section class="card">
+          <h2>Players</h2>
+          <ul id="players" class="players"></ul>
+        </section>
+
+        <section class="card">
+          <h2>History</h2>
+          <ul id="history" class="history"></ul>
+        </section>
+
+        <section class="card" id="host-panel" hidden>
+          <h2>Host controls</h2>
+          <form id="settings-form" class="settings">
+            <label class="check"><input type="checkbox" name="startWithPayday"> Start with savings + one Payday</label>
+            <label>Loan unit ($) <input type="number" name="loanUnit" min="1" step="1" inputmode="numeric"></label>
+            <label>Loan rate (%/mo) <input type="number" name="loanRatePercent" min="0" max="100" step="1" inputmode="numeric"></label>
+            <button class="btn" type="submit">Save settings</button>
+          </form>
+          <ul id="host-players" class="host-players"></ul>
+          <button class="btn danger" data-click="reset">Reset game</button>
+          <p class="muted small">Reset sends everyone back to profession setup (their card numbers are kept) and clears history.</p>
+        </section>
+      </div>
+      <div class="page" id="page-statement">
+        <div id="statement"></div>
+      </div>
+    </div>
+  </main>
+
+  <p id="offline" class="offline" hidden>Reconnecting…</p>
+
+  <!-- Generic bottom-sheet form -->
+  <dialog id="sheet">
+    <form id="sheet-form" autocomplete="off">
+      <h2 id="sheet-title"></h2>
+      <p id="sheet-help" class="muted small"></p>
+      <div id="sheet-fields"></div>
+      <div id="sheet-preview" class="preview"></div>
+      <p class="error" id="sheet-error" role="alert"></p>
+      <div class="sheet-buttons">
+        <button type="button" class="btn" data-click="closeSheet">Cancel</button>
+        <button type="submit" class="btn primary" id="sheet-submit">Confirm</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/statement.js"></script>
+  <script src="professions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
